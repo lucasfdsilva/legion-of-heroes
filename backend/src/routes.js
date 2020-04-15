@@ -3,8 +3,11 @@ const { Router } = require('express');
 const organizationController = require('./controllers/organizationController');
 const incidentController = require('./controllers/incidentController');
 const searchController = require('./controllers/searchController');
+const sessionController = require('./controllers/sessionController');
 
 const routes = Router();
+
+routes.post('/sessions', sessionController.create);
 
 routes.get('/organizations', organizationController.index);
 routes.get('/organizations/:id', organizationController.show);
