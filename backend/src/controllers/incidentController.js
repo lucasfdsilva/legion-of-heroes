@@ -1,18 +1,32 @@
-const bcryptjs = require('bcryptjs');
-const crypto = require('crypto');
-
 const connection = require('../database/connection');
 
 module.exports = {
 
   async index(req, res){
     try{
-      const incidents = await connection('incidents').select('*');
+      const { page = 1 } = req.query;
 
-      return res.json(incidents);
+      const [count] = await connection('incidents').count();
+
+      const incidents = await connection('incidents')
+        .join('organizations', 'organizations.id', '=', 'incidents.organization_id')
+        .limit(5)
+        .offset((page - 1) * 5)
+        .select([
+          'incidents.*', 
+          'organizations.name', 
+          'organizations.email', 
+          'organizations.whatsapp', 
+          'organizations.city', 
+          'organizations.country'
+        ]);
+
+      res.header('X-Total-Count', count['count(*)']);
+
+      return res.status(200).json(incidents);
 
     } catch(err){
-      return res.status(400).json({ error: err })
+        return res.status(400).json({ error: err })
     }
   },
 
