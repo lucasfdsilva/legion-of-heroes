@@ -56,6 +56,21 @@ module.exports = {
 
   async delete(req, res){
     try{
+      const { id } = req.params;
+      const organization_id = req.headers.authorization;
+
+      const incident = await connection('incidents')
+        .where('id', id)
+        .select('organization_id')
+        .first();
+
+      if(incident.organization_id !== organization_id){
+        return res.status(401).json({ error: 'Operation not permitted. Incident belongs to a different organization'});
+      }
+
+      await connection('incidents').where('id', id).delete();
+
+      return res.status(204).send();
 
     } catch(err){
       return res.status(400).json({ error: err })

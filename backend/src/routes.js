@@ -2,6 +2,7 @@ const { Router } = require('express');
 
 const organizationController = require('./controllers/organizationController');
 const incidentController = require('./controllers/incidentController');
+const searchController = require('./controllers/searchController');
 
 const routes = Router();
 
@@ -14,7 +15,9 @@ routes.delete('/organizations', organizationController.delete);
 routes.get('/incidents', incidentController.index);
 routes.get('/incidents/:id', incidentController.show);
 routes.post('/incidents', incidentController.create);
-routes.put('/incidents', incidentController.update);
-routes.delete('/incidents', incidentController.delete);
+routes.put('/incidents/:id', incidentController.update);
+routes.delete('/incidents/:id', incidentController.delete);
+
+routes.get('/search/incidents', searchController.incidentsByOrganization);
 
 module.exports = routes;
