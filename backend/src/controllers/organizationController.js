@@ -68,11 +68,35 @@ module.exports = {
 
   async delete(req, res){
     try{
+      const { organization_id } = req.body;
+
+      if (!organization_id) {
+        res.status(401).json({ error: "Missing Organization ID from Request" });
+      }
+
+      const organization = await connection('organizations')
+        .where('id', organization_id)
+        .select('id', 'name')
+        .first()
+
+      if (!organization) {
+        return res.status(401).json({ error: "Organization Not Found" });
+      }
+
+      await connection('incidents')
+        .where('organization_id', organization_id)
+        .del()
+
+      await connection('organizations')
+        .where('id', organization_id)
+        .del()
+
+      return res.status(200).json({ message: "Organization deleted successfully" });
 
     } catch(err){
-      return res.status(400).json({ error: err })
+        return res.status(400).json({ error: err })
     }
-  },
+  }
 
 }
 
