@@ -1,11 +1,20 @@
+require('dotenv').config();
+
 // Update with your config settings.
 
 module.exports = {
 
   development: {
-    client: 'sqlite3',
+    client: 'mysql',
     connection: {
-      filename: './src/database/db.sql'
+      host: process.env.AWS_RDS_HOST,
+      database: process.env.AWS_RDS_DATABASE,
+      user: process.env.AWS_RDS_USERNAME,
+      password: process.env.AWS_RDS_PASSWORD
+    },
+    pool: {
+      min: 0,
+      max: 10
     },
     migrations: {
       directory: './src/database/migrations'
@@ -30,19 +39,21 @@ module.exports = {
   },
 
   production: {
-    client: 'postgresql',
+    client: 'mysql',
     connection: {
-      database: 'my_db',
-      user:     'username',
-      password: 'password'
+      host: process.env.AWS_RDS_HOST,
+      database: process.env.AWS_RDS_DATABASE,
+      user: process.env.AWS_RDS_USERNAME,
+      password: process.env.AWS_RDS_PASSWORD
     },
     pool: {
-      min: 2,
+      min: 0,
       max: 10
     },
     migrations: {
-      tableName: 'knex_migrations'
-    }
+      directory: './src/database/migrations'
+    },
+    useNullAsDefault: true,
   }
 
 };
