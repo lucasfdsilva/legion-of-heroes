@@ -21,8 +21,25 @@ module.exports = {
   async show(req, res){
     try{
 
+      const { organization_id } = req.params;
+
+      if(!organization_id){
+        return res.status(400).json({ error: 'Missing Organization ID'})
+      }
+
+      const organization = await connection('organizations')
+       .where('id', organization_id)
+       .select('id', 'name', 'email', 'whatsapp', 'city', 'country', 'eircode')
+       .first()
+
+      if(!organization){
+        return res.status(400).json({ error: 'No Organization Found with Provided ID'})
+      }
+
+      return res.status(200).json(organization)
+
     } catch(err){
-      return res.status(400).json({ error: err })
+        return res.status(400).json({ error: err })
     }
   },
 

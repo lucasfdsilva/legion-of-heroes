@@ -32,9 +32,25 @@ module.exports = {
 
   async show(req, res){
     try{
+      const { incident_id } = req.params;
+
+      if(!incident_id){
+        return res.status(400).json({ error: 'Missing Incident ID'})
+      }
+
+      const incident = await connection('incidents')
+       .where('id', incident_id)
+       .select('*')
+       .first()
+
+      if(!incident){
+        return res.status(400).json({ error: 'No Incident Found with Provided ID'})
+      }
+
+      return res.status(200).json(incident);
 
     } catch(err){
-      return res.status(400).json({ error: err })
+        return res.status(400).json({ error: err })
     }
   },
 
