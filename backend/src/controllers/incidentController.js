@@ -35,7 +35,7 @@ module.exports = {
       const { incident_id } = req.params;
 
       if(!incident_id){
-        return res.status(400).json({ error: 'Missing Incident ID'})
+        return res.status(401).json({ error: 'Missing Incident ID'})
       }
 
       const incident = await connection('incidents')
@@ -44,7 +44,7 @@ module.exports = {
        .first()
 
       if(!incident){
-        return res.status(400).json({ error: 'No Incident Found with Provided ID'})
+        return res.status(401).json({ error: 'No Incident Found with Provided ID'})
       }
 
       return res.status(200).json(incident);
@@ -68,11 +68,10 @@ module.exports = {
 
       const incident_id = result[0];
 
-      return res.json({ incident_id });
+      return res.status(200).json({ incident_id, title, value, organization_id });
 
     } catch(err){
-      console.log(err)
-      return res.status(400).json({ error: err })
+        return res.status(400).json({ error: err })
     }
   },
 
