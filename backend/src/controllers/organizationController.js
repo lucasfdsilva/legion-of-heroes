@@ -14,7 +14,7 @@ module.exports = {
       return res.json(organizations);
 
     } catch(err){
-      return res.status(400).json({ error: err })
+        return res.status(400).json({ error: err })
     }
   },
 
