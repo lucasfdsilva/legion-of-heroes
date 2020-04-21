@@ -20,7 +20,7 @@ module.exports = {
         .first();
 
       if(!organization){
-        return res.status(401).json({ error: 'No Organization found with this email'});
+        return res.status(401).json({ error: 'Organization NOT Found'});
       }
 
       if (organization.verified == 0){
