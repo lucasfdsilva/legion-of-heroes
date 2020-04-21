@@ -33,7 +33,7 @@ module.exports = {
        .first()
 
       if(!organization){
-        return res.status(400).json({ error: 'No Organization Found with Provided ID'})
+        return res.status(400).json({ error: 'Organization Not Found'})
       }
 
       return res.status(200).json(organization)
