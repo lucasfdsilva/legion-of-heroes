@@ -94,7 +94,7 @@ module.exports = {
         .first();
 
       if(incident.organization_id !== organization_id){
-        return res.status(401).json({ error: 'Operation not authorized. Incident belongs to a different organization'});
+        return res.status(401).json({ error: 'Operation not authorized. Incident belongs to another organization'});
       }
 
       await connection('incidents').where('id', id).delete();
