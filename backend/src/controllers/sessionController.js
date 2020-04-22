@@ -24,7 +24,7 @@ module.exports = {
       }
 
       if (organization.verified == 0){
-        return res.status(401).json({ error: "Please verify your email before logging in" });
+        return res.status(401).json({ error: "Please verify your email account before logging in" });
       }
 
       if (await bcryptjs.compare(password, organization.password)){
