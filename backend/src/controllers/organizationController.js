@@ -1,11 +1,10 @@
-require('dotenv').config();
 const bcryptjs = require('bcryptjs');
 const crypto = require('crypto');
 const AWS = require('aws-sdk');
 
 const knexConnection = require('../database/knexConnection');
 
-const AWSSecretsManager = require('../../AWSSecretsManager');
+const AWSEmailService = require('../resources/AWSEmailService');
 
 module.exports = {
 
@@ -63,7 +62,7 @@ module.exports = {
       const salt = await bcryptjs.genSalt();
       const hashedPassword = await bcryptjs.hash(password, salt);
 
-      //Inserting Organization into SQLite
+      //Inserting Organization into AWS RDS Database
       await connectDB('organizations').insert({
         id,
         name,
@@ -77,42 +76,11 @@ module.exports = {
         verificationToken
       });
 
-      // Amazon SES Configuration
-      const credentials = await AWSSecretsManager.getCredentials('legion-of-heroes-ses-credentials');
-
-      const SESConfig = {
-        apiVersion: '2010-12-01',
-        accessKeyId: credentials.accesskeyid,
-        secretAccessKey: credentials.accesskeysecret,
-        region: credentials.region
-      };
-
-      var SESparams = {
-        Source: 'support@legionofheroes.co.uk',
-        Destination: {
-          ToAddresses: [
-            email
-          ]
-        },
-        ReplyToAddresses: [
-          'support@legionofheroes.co.uk'
-        ],
-        Message: {
-          Subject: {
-            Charset: 'UTF-8',
-            Data: 'Legion of Heroes Registration - Email Verification'
-          },
-          Body: {
-            Html: {
-              Charset: 'UTF-8',
-              Data: `<p>Please use the following link to verify your email address: http://legionofheroes.co.uk/organizations/verify/${verificationToken}</p>`
-            }
-          }
-        }
-      };
+      //AWS SES Preparation
+      const SESData = await AWSEmailService.getAWSSESConfig(email);
 
       // Builder to send a new email from SES
-      new AWS.SES(SESConfig).sendEmail(SESparams).promise().then((res) => {
+      new AWS.SES(SESData.SESConfig).sendEmail(SESData.SESparams).promise().then((res) => {
         console.log(res);
       })
 
