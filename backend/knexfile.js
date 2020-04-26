@@ -3,7 +3,7 @@ const AWSSecretsManager = require("../backend/AWSSecretsManager");
 // Update with your config settings.
 module.exports = {
   async getConfiguration() {
-    const credentials = await AWSSecretsManager.getCredentials();
+    const credentials = await AWSSecretsManager.getCredentials('legion-of-heroes-db-credentials');
 
     return {
       development: {
@@ -59,6 +59,4 @@ module.exports = {
       },
     };
   },
-
-  
 };

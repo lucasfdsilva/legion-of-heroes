@@ -5,6 +5,8 @@ const AWS = require('aws-sdk');
 
 const knexConnection = require('../database/knexConnection');
 
+const AWSSecretsManager = require('../../AWSSecretsManager');
+
 module.exports = {
 
   async index(req, res){
@@ -76,11 +78,13 @@ module.exports = {
       });
 
       // Amazon SES Configuration
+      const credentials = await AWSSecretsManager.getCredentials('legion-of-heroes-ses-credentials');
+
       const SESConfig = {
         apiVersion: '2010-12-01',
-        accessKeyId: process.env.AWS_SES_ACCESS_KEY_ID,
-        secretAccessKey: process.env.AWS_SES_ACCESS_SECRET_KEY,
-        region: process.env.AWS_SES_REGION
+        accessKeyId: credentials.accesskeyid,
+        secretAccessKey: credentials.accesskeysecret,
+        region: credentials.region
       };
 
       var SESparams = {
