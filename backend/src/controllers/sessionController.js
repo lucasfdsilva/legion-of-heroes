@@ -4,6 +4,8 @@ const jwt = require('jsonwebtoken');
 
 const knexConnection = require('../database/knexConnection');
 
+const AWSSecretsManager = require('../../AWSSecretsManager');
+
 module.exports = {
 
   async create(req, res){
@@ -30,9 +32,11 @@ module.exports = {
       }
 
       if (await bcryptjs.compare(password, organization.password)){
-        const accessToken = jwt.sign(organization.id, process.env.JWT_SECRET);
+        const { jwtsecret } = await AWSSecretsManager.getCredentials('legion-of-heroes-ses-credentials');
+        
+        const accessToken = jwt.sign(organization.id, jwtsecret);
 
-        res.status(200).json({ message: "Organization Logged in succesfully", id: organization.id, accessToken: accessToken });
+        res.status(200).json({ message: "Organization Logged in succesfully", organization_id: organization.id, accessToken: accessToken });
 
       } else {
         res.status(401).json({ message: "Password is incorrect" });
