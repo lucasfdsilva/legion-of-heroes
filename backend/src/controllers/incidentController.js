@@ -1,14 +1,16 @@
-const connection = require('../database/connection');
+const knexConnection = require('../database/knexConnection');
 
 module.exports = {
 
   async index(req, res){
     try{
+      const connectDB = await knexConnection.connect();
+
       const { page = 1 } = req.query;
 
-      const [count] = await connection('incidents').count();
+      const [count] = await connectDB('incidents').count();
 
-      const incidents = await connection('incidents')
+      const incidents = await connectDB('incidents')
         .join('organizations', 'organizations.id', '=', 'incidents.organization_id')
         .limit(5)
         .offset((page - 1) * 5)
@@ -32,13 +34,15 @@ module.exports = {
 
   async show(req, res){
     try{
+      const connectDB = await knexConnection.connect();
+
       const { incident_id } = req.params;
 
       if(!incident_id){
         return res.status(401).json({ error: 'Missing Incident ID'})
       }
 
-      const incident = await connection('incidents')
+      const incident = await connectDB('incidents')
        .where('id', incident_id)
        .select('*')
        .first()
@@ -56,10 +60,12 @@ module.exports = {
 
   async create(req, res){
     try{
+      const connectDB = await knexConnection.connect();
+
       const { title, description, value } = req.body;
       const organization_id = req.headers.authorization;
 
-      const result = await connection('incidents').insert({
+      const result = await connectDB('incidents').insert({
         title,
         description,
         value,
@@ -85,10 +91,12 @@ module.exports = {
 
   async delete(req, res){
     try{
+      const connectDB = await knexConnection.connect();
+
       const { id } = req.params;
       const organization_id = req.headers.authorization;
 
-      const incident = await connection('incidents')
+      const incident = await connectDB('incidents')
         .where('id', id)
         .select('organization_id')
         .first();
@@ -97,7 +105,7 @@ module.exports = {
         return res.status(401).json({ error: 'Operation not authorized. Incident belongs to another organization'});
       }
 
-      await connection('incidents').where('id', id).delete();
+      await connectDB('incidents').where('id', id).delete();
 
       return res.status(204).send();
 

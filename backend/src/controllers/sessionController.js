@@ -2,19 +2,21 @@ require('dotenv').config();
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
-const connection = require('../database/connection');
+const knexConnection = require('../database/knexConnection');
 
 module.exports = {
 
   async create(req, res){
     try{
+      const connectDB = await knexConnection.connect();
+
       const { email, password } = req.body;
 
       if (!email || !password) {
         res.status(400).json({ error: "Missing Required Information from Request" });
       }
 
-      const organization = await connection('organizations')
+      const organization = await connectDB('organizations')
         .where('email', email)
         .select('id', 'name', 'email', 'verified', 'password')
         .first();

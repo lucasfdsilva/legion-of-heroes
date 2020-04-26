@@ -1,16 +1,18 @@
-const connection = require('../database/connection');
+const knexConnection = require('../database/knexConnection');
 
 module.exports = {
 
   async verifyOrganization(req, res){
     try{
+      const connectDB = await knexConnection.connect();
+
       const { verificationToken } = req.params;
 
       if (!verificationToken) {
         res.status(401).json({ error: "Missing Verification Token from Request" });
       }
 
-      const organization = await connection('organizations')
+      const organization = await connectDB('organizations')
         .where('verificationToken', verificationToken)
         .select('id', 'name', 'verified');
 
@@ -18,7 +20,7 @@ module.exports = {
         return res.status(401).json({ error: 'No Organization found with provided Verification Token'})
       }
 
-      await connection('organizations')
+      await connectDB('organizations')
         .where('verificationToken', verificationToken)
         .update({
           verified: 1

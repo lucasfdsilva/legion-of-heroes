@@ -1,12 +1,14 @@
-const connection = require('../database/connection');
+const knexConnection = require('../database/knexConnection');
 
 module.exports = {
 
   async incidentsByOrganization(req, res){
     try{
+      const connectDB = await knexConnection.connect();
+
       const { organization_id } = req.query;
 
-      const  incidents = await connection('incidents')
+      const  incidents = await connectDB('incidents')
         .where('organization_id', organization_id)
         .select('*');
 
