@@ -21,7 +21,7 @@ module.exports = {
         Message: {
           Subject: {
             Charset: "UTF-8",
-            Data: "Legion of Heroes Registration - Email Verification",
+            Data: "Legion of Heroes Registration - Email Account Verification",
           },
           Body: {
             Html: {
