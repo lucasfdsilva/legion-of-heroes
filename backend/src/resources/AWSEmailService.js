@@ -26,7 +26,7 @@ module.exports = {
           Body: {
             Html: {
               Charset: "UTF-8",
-              Data: `<p>Please use the following link to verify your email address: http://legionofheroes.co.uk/organizations/verify/${verificationToken}</p>`,
+              Data: `<p>Please click on the following link to verify your email address: http://legionofheroes.co.uk/organizations/verify/${verificationToken}</p>`,
             },
           },
         },
