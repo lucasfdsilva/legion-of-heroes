@@ -93,6 +93,49 @@ module.exports = {
 
   async update(req, res){
     try{
+      const connectDB = await knexConnection.connect();
+
+      const { organization_id, name, email, whatsapp, city, eircode, country } = req.body;
+
+      if (!organization_id) {
+        return res.status(401).json({ error: "Missing Organization ID from Request" });
+      }
+
+      const organization = await connectDB('organizations')
+        .where('id', organization_id)
+        .select('id', 'name', 'email', 'whatsapp', 'city', 'eircode', 'country')
+        .first()
+
+      if (!organization) {
+        return res.status(401).json({ error: "Organization Not Found" });
+      }
+
+      const updateDetails = { 
+        name, 
+        email, 
+        whatsapp, 
+        city, 
+        eircode, 
+        country 
+      };
+
+      await connectDB('organizations')
+        .where('id', organization_id)
+        .update({ 
+          name: updateDetails.name,
+          email: updateDetails.email,
+          whatsapp: updateDetails.whatsapp,
+          city: updateDetails.city,
+          eircode: updateDetails.eircode,
+          country: updateDetails.country,
+        });
+
+      const updatedOrganization = await connectDB('organizations')
+      .where('id', organization_id)
+      .select('id', 'name', 'email', 'whatsapp', 'city', 'eircode', 'country')
+      .first()
+
+      return res.status(200).json({ message: 'Success: Organization updated succesfully', updatedOrganization });
 
     } catch(err){
       return res.status(400).json({ error: err })
