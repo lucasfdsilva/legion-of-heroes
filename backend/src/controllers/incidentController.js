@@ -86,6 +86,7 @@ module.exports = {
       const connectDB = await knexConnection.connect();
 
       const { incident_id, title, description, value } = req.body;
+      const organization_id = req.headers.authorization;
 
       if (!incident_id) {
         return res.status(401).json({ error: "Missing Incident ID from Request" });
@@ -97,7 +98,11 @@ module.exports = {
         .first()
 
       if (!incident) {
-        return res.status(401).json({ error: "Incident Not Found" });
+        return res.status(401).json({ error: "ERROR: Incident Not Found" });
+      }
+
+      if(incident.organization_id !== organization_id){
+        return res.status(401).json({ error: 'ERROR: Incident belongs to another organization'});
       }
 
       const updateDetails = { 
@@ -130,25 +135,33 @@ module.exports = {
     try{
       const connectDB = await knexConnection.connect();
 
-      const { id } = req.params;
+      const { incident_id } = req.body;
       const organization_id = req.headers.authorization;
 
+      if (!incident_id) {
+        return res.status(401).json({ error: "ERROR: Missing Incident ID from Request" });
+      }
+
       const incident = await connectDB('incidents')
-        .where('id', id)
+        .where('id', incident_id)
         .select('organization_id')
         .first();
 
-      if(incident.organization_id !== organization_id){
-        return res.status(401).json({ error: 'Operation not authorized. Incident belongs to another organization'});
+      if (!incident) {
+        return res.status(401).json({ error: "ERROR: Incident Not Found" });
       }
 
-      await connectDB('incidents').where('id', id).delete();
+      if(incident.organization_id !== organization_id){
+        return res.status(401).json({ error: 'ERROR: Incident belongs to another organization' });
+      }
+
+      await connectDB('incidents').where('id', incident_id).delete();
 
       return res.status(204).send();
 
     } catch(err){
         return res.status(400).json({ error: err })
     }
-  },
+  }
 
 }

@@ -23,7 +23,7 @@ routes.get('/incidents', incidentController.index);
 routes.get('/incidents/:incident_id', incidentController.show);
 routes.post('/incidents', incidentController.create);
 routes.put('/incidents', incidentController.update);
-routes.delete('/incidents/:id', incidentController.delete);
+routes.delete('/incidents', incidentController.delete);
 
 routes.get('/search/incidents', searchController.incidentsByOrganization);
 
