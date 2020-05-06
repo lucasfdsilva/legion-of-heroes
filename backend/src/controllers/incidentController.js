@@ -83,9 +83,46 @@ module.exports = {
 
   async update(req, res){
     try{
+      const connectDB = await knexConnection.connect();
+
+      const { incident_id, title, description, value } = req.body;
+
+      if (!incident_id) {
+        return res.status(401).json({ error: "Missing Incident ID from Request" });
+      }
+
+      const incident = await connectDB('incidents')
+        .where('id', incident_id)
+        .select('id', 'title', 'description', 'value', 'organization_id')
+        .first()
+
+      if (!incident) {
+        return res.status(401).json({ error: "Incident Not Found" });
+      }
+
+      const updateDetails = { 
+        title, 
+        description, 
+        value
+      };
+
+      await connectDB('incidents')
+        .where('id', incident_id)
+        .update({ 
+          title: updateDetails.title,
+          description: updateDetails.description,
+          value: updateDetails.value,
+        });
+
+      const updatedIncident = await connectDB('incidents')
+      .where('id', incident_id)
+      .select('id', 'title', 'description', 'value', 'organization_id')
+      .first()
+
+      return res.status(200).json({ message: 'Success: Incident updated succesfully', updatedIncident });
 
     } catch(err){
-      return res.status(400).json({ error: err })
+        return res.status(400).json({ error: err })
     }
   },
 
@@ -110,7 +147,7 @@ module.exports = {
       return res.status(204).send();
 
     } catch(err){
-      return res.status(400).json({ error: err })
+        return res.status(400).json({ error: err })
     }
   },
 
