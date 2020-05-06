@@ -8,9 +8,17 @@ module.exports = {
 
       const { organization_id } = req.query;
 
-      const  incidents = await connectDB('incidents')
+      if(!organization_id){
+        return res.status(401).json({ error: 'ERROR: Missing Organization ID'})
+      }
+
+      const incidents = await connectDB('incidents')
         .where('organization_id', organization_id)
         .select('*');
+
+      if(!incidents){
+        return res.status(401).json({ message: 'This organization has no incidents'})
+      }
 
       return res.status(200).json(incidents);
 
