@@ -1,4 +1,3 @@
-require('dotenv').config();
 const bcryptjs = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
@@ -15,7 +14,7 @@ module.exports = {
       const { email, password } = req.body;
 
       if (!email || !password) {
-        res.status(400).json({ error: "Missing Required Information from Request" });
+        res.status(400).json({ error: "ERROR: Missing Required Information from Request" });
       }
 
       const organization = await connectDB('organizations')
@@ -24,11 +23,11 @@ module.exports = {
         .first();
 
       if(!organization){
-        return res.status(401).json({ error: 'Organization NOT Found'});
+        return res.status(401).json({ error: 'ERROR: Organization NOT Found'});
       }
 
       if (organization.verified == 0){
-        return res.status(401).json({ error: "Please verify your email account before logging in" });
+        return res.status(401).json({ error: "ERROR: Please verify your email account before logging in" });
       }
 
       if (await bcryptjs.compare(password, organization.password)){
@@ -43,16 +42,7 @@ module.exports = {
       }
 
     } catch(err){
-      return res.status(400).json({ error: err })
-    }
-  },
-
-  async show(req, res) {
-    try{
-
-
-    } catch(err){
-      return res.status(400).json({ error: err })
+        return res.status(400).json({ error: err })
     }
   }
 
