@@ -9,7 +9,7 @@ module.exports = {
       const { verificationToken } = req.params;
 
       if (!verificationToken) {
-        res.status(401).json({ error: "Missing Verification Token from Request" });
+        res.status(401).json({ error: "ERROR: Missing Verification Token from Request" });
       }
 
       const organization = await connectDB('organizations')
@@ -17,7 +17,7 @@ module.exports = {
         .select('id', 'name', 'verified');
 
       if(!organization){
-        return res.status(401).json({ error: 'No Organization found with provided Verification Token'})
+        return res.status(401).json({ error: 'ERROR: No Organization found with provided Verification Token'})
       }
 
       await connectDB('organizations')
