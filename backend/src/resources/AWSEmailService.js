@@ -1,4 +1,4 @@
-const AWSSecretsManager = require("../../AWSSecretsManager");
+const AWSSecretsManager = require("../AWSSecretsManager");
 
 module.exports = {
   async getAWSSESConfig(email) {

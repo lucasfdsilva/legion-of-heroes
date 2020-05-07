@@ -1,0 +1,85 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  SAM Template for legion-of-heroes
+
+Globals:
+  Function:
+    Runtime: nodejs12.x
+    Timeout: 30
+
+Resources:
+  OrganizationIndexFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/
+      Handler: ./controllers/organizationController.index
+      Policies: 
+        #Give Lambda function access to AWS Secrets Manager
+        - SecretsManagerReadWrite
+      Events:
+        OrganizationIndexFunction:
+          Type: Api
+          Properties:
+            Path: /organizations
+            Method: get
+            
+  OrganizationShowFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/
+      Handler: ./controllers/organizationController.index
+      Policies: 
+        #Give Lambda function access to AWS Secrets Manager
+        - SecretsManagerReadWrite
+      Events:
+        OrganizationIndexFunction:
+          Type: Api
+          Properties:
+            Path: /organizations/{organization_id}
+            Method: get
+
+  OrganizationCreateFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/
+      Handler: ./controllers/organizationController.index
+      Policies: 
+        #Give Lambda function access to AWS Secrets Manager
+        - SecretsManagerReadWrite
+      Events:
+        OrganizationIndexFunction:
+          Type: Api
+          Properties:
+            Path: /organizations
+            Method: post
+            
+  OrganizationUpdateFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/
+      Handler: ./controllers/organizationController.index
+      Policies: 
+        #Give Lambda function access to AWS Secrets Manager
+        - SecretsManagerReadWrite
+      Events:
+        OrganizationIndexFunction:
+          Type: Api
+          Properties:
+            Path: /organizations
+            Method: put
+
+  OrganizationDeleteFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/
+      Handler: ./controllers/organizationController.index
+      Policies: 
+        #Give Lambda function access to AWS Secrets Manager
+        - SecretsManagerReadWrite
+      Events:
+        OrganizationIndexFunction:
+          Type: Api
+          Properties:
+            Path: /organizations
+            Method: delete

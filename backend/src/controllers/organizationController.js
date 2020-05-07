@@ -14,10 +14,18 @@ module.exports = {
 
       const organizations = await connectDB('organizations').select('*');
 
-      return res.json(organizations);
+      response = {
+        'statusCode': 200,
+        'body': JSON.stringify({
+            organizations,
+        })
+      }
+
+      console.log('running index function')
+      return response
 
     } catch(err){
-        return res.status(400).json({ error: err })
+        return err;
     }
   },
 

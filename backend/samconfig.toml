@@ -1,0 +1,10 @@
+version = 0.1
+[default]
+[default.deploy]
+[default.deploy.parameters]
+stack_name = "legion-of-heroes"
+s3_bucket = "aws-sam-cli-managed-default-samclisourcebucket-u2sp56licrq1"
+s3_prefix = "legion-of-heroes"
+region = "eu-west-1"
+capabilities = "CAPABILITY_IAM"
+

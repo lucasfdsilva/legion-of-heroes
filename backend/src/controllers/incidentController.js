@@ -39,7 +39,7 @@ module.exports = {
       const { incident_id } = req.params;
 
       if(!incident_id){
-        return res.status(401).json({ error: 'Missing Incident ID'})
+        return res.status(401).json({ error: 'ERROR: Missing Incident ID'})
       }
 
       const incident = await connectDB('incidents')

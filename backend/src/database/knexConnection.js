@@ -1,5 +1,5 @@
 const knex = require("knex");
-const knexConfiguration = require("../../knexfile");
+const knexConfiguration = require("../knexfile");
 
 module.exports = {
   async connect() {

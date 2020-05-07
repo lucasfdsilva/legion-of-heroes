@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 
 const knexConnection = require('../database/knexConnection');
 
-const AWSSecretsManager = require('../../AWSSecretsManager');
+const AWSSecretsManager = require('../AWSSecretsManager');
 
 module.exports = {
 

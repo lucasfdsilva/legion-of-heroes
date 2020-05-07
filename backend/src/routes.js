@@ -9,7 +9,6 @@ const verificationController = require('./controllers/verificationController')
 const routes = Router();
 
 routes.post('/sessions', sessionController.create);
-routes.get('/sessions', sessionController.show);
 
 routes.get('/organizations', organizationController.index);
 routes.get('/organizations/:organization_id', organizationController.show);

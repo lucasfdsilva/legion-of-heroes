@@ -1,4 +1,4 @@
-const AWSSecretsManager = require("../backend/AWSSecretsManager");
+const AWSSecretsManager = require("./AWSSecretsManager");
 
 // Update with your config settings.
 module.exports = {
