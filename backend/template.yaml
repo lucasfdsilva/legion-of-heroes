@@ -6,9 +6,10 @@ Description: >
 Globals:
   Function:
     Runtime: nodejs12.x
-    Timeout: 30
+    Timeout: 10
 
 Resources:
+  #Organization Controller Resources
   OrganizationIndexFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -83,3 +84,19 @@ Resources:
           Properties:
             Path: /organizations
             Method: delete
+
+  #Incident Controller Resources
+  IncidentIndexFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: src/
+      Handler: ./controllers/incidentController.index
+      Policies: 
+        #Give Lambda function access to AWS Secrets Manager
+        - SecretsManagerReadWrite
+      Events:
+        OrganizationIndexFunction:
+          Type: Api
+          Properties:
+            Path: /incidents
+            Method: get
