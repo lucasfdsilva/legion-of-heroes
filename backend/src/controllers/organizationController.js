@@ -14,15 +14,14 @@ module.exports = {
 
       const organizations = await connectDB('organizations').select('*');
 
-      response = {
+      let response = {
         'statusCode': 200,
         'body': JSON.stringify({
             organizations,
         })
       }
 
-      console.log('running index function')
-      return response
+      return response;
 
     } catch(err){
         return err;
@@ -36,7 +35,13 @@ module.exports = {
       const { organization_id } = req.params;
 
       if(!organization_id){
-        return res.status(400).json({ error: 'Missing Organization ID'})
+        let response = {
+          'statusCode': 200,
+          'body': JSON.stringify({
+            error: 'ERROR: Missing Organization ID',
+          })
+        }
+        return response;
       }
 
       const organization = await connectDB('organizations')
@@ -48,10 +53,16 @@ module.exports = {
         return res.status(400).json({ error: 'Organization Not Found'})
       }
 
-      return res.status(200).json(organization)
+      let response = {
+        'statusCode': 200,
+        'body': JSON.stringify({
+            organization,
+        })
+      }
+      return response;
 
     } catch(err){
-        return res.status(400).json({ error: err })
+        return err;
     }
   },
 
