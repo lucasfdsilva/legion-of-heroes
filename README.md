@@ -30,4 +30,4 @@ The idea for this project is to build an application that can connect Users and 
 - Mobile app
   - Developed using React Native Framework
   - Mobile App will initially be available only on Android OS. iOS version will be available at a later stage.
-  - Application will initially be available on at Google Play Store. App will be added to App Store when launching the iOS Version
+  - Application will initially be available on at Google Play Store. App will be added to App Store when launching the iOS Version.
