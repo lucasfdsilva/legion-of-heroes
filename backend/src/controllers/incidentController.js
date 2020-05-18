@@ -48,7 +48,7 @@ module.exports = {
        .first()
 
       if(!incident){
-        return res.status(401).json({ error: 'Incident Not Found with Provided ID'})
+        return res.status(401).json({ error: 'ERROR: Incident Not Found with Provided ID'})
       }
 
       return res.status(200).json(incident);
